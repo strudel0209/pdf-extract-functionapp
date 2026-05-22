@@ -17,7 +17,7 @@ See [architecture-description.md](architecture-description.md) for the full desi
 .
 ├── architecture-description.md         # Design doc + lessons learned
 ├── architecture-durable-functions.svg  # Pipeline diagram
-├── sp-to-blob.ipynb                    # Original customer notebook (baseline reference)
+├── sp-to-blob.ipynb                    # Original notebook (baseline reference)
 └── function_app/                       # Azure Functions project (Python v2)
     ├── function_app.py                 # App entrypoint — registers blueprints
     ├── orchestrator.py                 # Durable orchestrator
@@ -210,41 +210,6 @@ az storage blob list --account-name "$DATA_STORAGE" --container-name source-pdfs
 
 ---
 
-## Preparing the repo for GitHub
-
-A `.gitignore` is already provided. Before the first push, verify:
-
-```bash
-# 1. Confirm local.settings.json is NOT tracked
-git status --ignored function_app/local.settings.json
-# → should show it under "Ignored files"
-
-# 2. Scan history for accidentally committed secrets (recommended)
-# git-secrets, gitleaks, or trufflehog all work
-gitleaks detect --no-git -v
-
-# 3. Initial commit
-git init -b main
-git add .
-git commit -m "Initial commit: Durable Functions SP→Blob PoC"
-git remote add origin git@github.com:<your-org>/AU-PCP-DocIntell.git
-git push -u origin main
-```
-
-What is excluded from the repo (see [.gitignore](.gitignore)):
-- `function_app/local.settings.json` — contains real tenant/site IDs
-- `__pycache__/`, `.venv/`, `.python_packages/`
-- `*.pem`, `*.pfx`, `.env*` — credentials and dotfiles
-- `/tmp/deploy.env`, build artifacts, IDE folders, logs
-
-What is committed:
-- All source under `function_app/`
-- `function_app/local.settings.sample.json` — placeholder template
-- `host.json`, `requirements.txt`
-- Architecture docs and diagram
-
----
-
 ## Security notes
 
 - The Function App uses its **system-assigned Managed Identity** to obtain tokens for both Microsoft Graph and Azure Blob Storage at runtime — there are no application secrets to rotate or store.
@@ -254,18 +219,3 @@ What is committed:
 
 ---
 
-## Troubleshooting
-
-| Symptom | Cause | Fix |
-|---|---|---|
-| Orchestration start returns HTTP 500 with empty body | MSI missing Queue/Table data role on AzureWebJobsStorage account | Grant `Storage Queue Data Contributor` + `Storage Table Data Contributor` on the platform storage account, restart the app |
-| `'dict' object has no attribute 'cache_control'` on blob upload | `azure-storage-blob` requires the typed `ContentSettings` object, not a dict | `from azure.storage.blob import ContentSettings` and pass `ContentSettings(content_type="...")` |
-| Graph download returns 404 even though listing returns the item | Code is using the SP list-item id instead of the drive-item id | `$expand=fields,driveItem` and use `driveItem.id` for `/drives/{driveId}/items/{id}/content` |
-| `az rest` per-site `Sites.Selected` grant returns `"Invalid request"` | The az CLI delegated token lacks `Sites.FullControl.All` | Grant from Graph Explorer (signed in as a SharePoint admin), or fall back to `Sites.Read.All` for PoC |
-| No telemetry in your explicit App Insights component | `az functionapp create` auto-created another component and overwrote the connection string | Set `APPLICATIONINSIGHTS_CONNECTION_STRING` *after* `functionapp create` and verify, or query the auto-created component instead |
-
----
-
-## License
-
-TBD.
