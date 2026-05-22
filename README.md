@@ -7,7 +7,11 @@ Azure Durable Functions pipeline that mirrors PDF documents (and their SharePoin
 - **Auth:** System-assigned Managed Identity end-to-end — no certificates, no client secrets, no Key Vault
 - **Output:** `source-pdfs/<library-path>/<filename>.pdf` + sibling `<filename>.pdf.metadata.json` sidecar
 
-See [architecture-description.md](architecture-description.md) for the full design rationale, cost model, and lessons learned, and [architecture-durable-functions.svg](architecture-durable-functions.svg) for the diagram.
+See [architecture-description.md](architecture-description.md) for the full design rationale, cost model, and lessons learned.
+
+<p align="center">
+  <img src="architecture-durable-functions.svg" alt="Durable Functions + Graph API pipeline architecture" width="100%">
+</p>
 
 ---
 
