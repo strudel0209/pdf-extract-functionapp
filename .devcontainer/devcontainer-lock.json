@@ -1,0 +1,19 @@
+{
+  "features": {
+    "ghcr.io/devcontainers/features/azure-cli:1": {
+      "version": "1.2.9",
+      "resolved": "ghcr.io/devcontainers/features/azure-cli@sha256:4549175fbfd3475d1d62e82f6e5425d03954a6ae06027b2515b0ba41a8206417",
+      "integrity": "sha256:4549175fbfd3475d1d62e82f6e5425d03954a6ae06027b2515b0ba41a8206417"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "1.7.1",
+      "resolved": "ghcr.io/devcontainers/features/node@sha256:8c0de46939b61958041700ee89e3493f3b2e4131a06dc46b4d9423427d06e5f6",
+      "integrity": "sha256:8c0de46939b61958041700ee89e3493f3b2e4131a06dc46b4d9423427d06e5f6"
+    },
+    "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {
+      "version": "1.0.1",
+      "resolved": "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools@sha256:a8b16ec41e15f0b28e49b831b02361b2519aa000d048e7d4d21e6a3b6486356c",
+      "integrity": "sha256:a8b16ec41e15f0b28e49b831b02361b2519aa000d048e7d4d21e6a3b6486356c"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+# --- Azure Functions ---
+# Local-only settings file. Contains tenant/site IDs and connection strings.
+# Use `local.settings.sample.json` as the committed template.
+local.settings.json
+function_app/local.settings.json
+bin/
+obj/
+.python_packages/
+.azurefunctions/
+
+# Function Core Tools artifacts
+.funcignore.local
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# --- Notebooks ---
+.ipynb_checkpoints/
+
+# --- VS Code / editor ---
+.vscode/
+.github/
+.idea/
+*.swp
+.DS_Store
+
+# --- Secrets / credentials ---
+*.pem
+*.pfx
+*.key
+*.crt
+.env
+.env.*
+!.env.example
+
+# --- Deployment scratch ---
+/tmp/deploy.env
+deployment-info.txt
+*.zip
+
+# --- Misc ---
+*.log

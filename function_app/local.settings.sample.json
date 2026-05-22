@@ -1,0 +1,26 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+
+    "_comment_sharepoint": "Get SP_SITE_ID from: GET https://graph.microsoft.com/v1.0/sites/{hostname}:/sites/{site-name}",
+    "SP_SITE_ID": "<hostname>.sharepoint.com,<site-guid>,<web-guid>",
+    "SP_LIST_ID": "<document-library-list-guid>",
+
+    "_comment_storage": "Target blob account (data storage). Authenticated via DefaultAzureCredential.",
+    "STORAGE_ACCOUNT_URL": "https://<storage-account>.blob.core.windows.net",
+    "BLOB_CONTAINER_NAME": "source-pdfs",
+
+    "_comment_sp_paths": "SP_SITE_PREFIX is stripped from FileRef when building blob names. Trailing slash optional.",
+    "SP_SITE_PREFIX": "/sites/<site-name>/",
+    "SP_FILE_EXTENSIONS": "pdf",
+
+    "_comment_schema": "false = standard fields only (PoC). true = full ABB_Coll_* / NextECM_Mig_* schema with server-side $filter on LifecycleStatus.",
+    "SP_USE_CUSTOM_FIELDS": "false",
+
+    "MAX_CONCURRENT_DOWNLOADS": "5",
+    "BATCH_SIZE": "200",
+    "GRAPH_BATCH_SIZE": "20"
+  }
+}

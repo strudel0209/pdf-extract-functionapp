@@ -1,0 +1,336 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1010" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f4ff;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#e8edf5;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="funcGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#f5a623;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="blobGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0078d4;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#004578;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="docGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8661c5;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#5c2d91;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="snowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#29b5e8;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1a8fbf;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="spGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#038387;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#025d60;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="llmGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10a37f;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0d8c6d;stop-opacity:1"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-opacity="0.15"/>
+    </filter>
+    <filter id="shadowSmall" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.1"/>
+    </filter>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0078d4"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f5a623"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2e7d32"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="1010" fill="url(#bgGrad)" rx="12"/>
+
+  <!-- Title -->
+  <text x="700" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1a1a2e">Durable Functions + Graph API Pipeline</text>
+  <text x="700" y="62" text-anchor="middle" font-size="13" fill="#555">100K PDFs · SharePoint Online → Blob (PDF + Metadata JSON) → Doc Intelligence → Snowflake · Cert-free Managed Identity auth</text>
+
+  <!-- ═══════════════ SHAREPOINT ONLINE (LEFT) ═══════════════ -->
+  <rect x="30" y="280" width="180" height="190" rx="10" fill="url(#spGrad)" filter="url(#shadow)"/>
+  <text x="120" y="308" text-anchor="middle" font-size="13" font-weight="600" fill="#fff">SharePoint Online</text>
+  <line x1="50" y1="318" x2="190" y2="318" stroke="#fff" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="120" y="340" text-anchor="middle" font-size="10" fill="#e0f7f7">/sites/OnePCP-DMS/ (prod)</text>
+  <text x="120" y="356" text-anchor="middle" font-size="10" fill="#e0f7f7">/sites/QualityAlerts (PoC)</text>
+  <text x="120" y="376" text-anchor="middle" font-size="10" fill="#e0f7f7">100K+ PDF documents</text>
+  <text x="120" y="394" text-anchor="middle" font-size="10" fill="#e0f7f7">20 ABB_Coll_* columns (prod)</text>
+  <text x="120" y="418" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">Graph API v1.0</text>
+  <text x="120" y="434" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">$filter on 1 indexed col</text>
+  <text x="120" y="450" text-anchor="middle" font-size="8" fill="#b2dfdb">(Graph limits: 1 col at a time)</text>
+  <text x="120" y="464" text-anchor="middle" font-size="9" fill="#b2dfdb">$batch (20/call)</text>
+
+  <!-- ═══════════════ DURABLE FUNCTIONS BOX ═══════════════ -->
+  <rect x="250" y="90" width="700" height="580" rx="12" fill="#fff" fill-opacity="0.6" stroke="#f5a623" stroke-width="2" stroke-dasharray="6,3" filter="url(#shadow)"/>
+  <rect x="250" y="90" width="700" height="35" rx="12" fill="url(#funcGrad)"/>
+  <rect x="250" y="110" width="700" height="15" fill="url(#funcGrad)"/>
+  <text x="600" y="113" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a2e">Azure Durable Functions · Flex Consumption (Python 3.11)</text>
+
+  <!-- Timer Trigger -->
+  <rect x="280" y="145" width="140" height="50" rx="8" fill="#fff" stroke="#f5a623" stroke-width="1.5" filter="url(#shadowSmall)"/>
+  <text x="350" y="167" text-anchor="middle" font-size="11" font-weight="600" fill="#333">⏰ Timer Trigger</text>
+  <text x="350" y="182" text-anchor="middle" font-size="9" fill="#666">Daily 02:00 UTC</text>
+
+  <!-- Orchestrator -->
+  <rect x="460" y="140" width="200" height="60" rx="8" fill="#fff3cd" stroke="#f5a623" stroke-width="2" filter="url(#shadowSmall)"/>
+  <text x="560" y="163" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Orchestrator</text>
+  <text x="560" y="180" text-anchor="middle" font-size="9" fill="#666">Checkpointing · State · Retry</text>
+  <text x="560" y="193" text-anchor="middle" font-size="9" fill="#666">Fan-out/Fan-in coordination</text>
+
+  <!-- Arrow: Timer → Orchestrator -->
+  <line x1="420" y1="170" x2="455" y2="170" stroke="#555" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- ─── Activity 1: List Files (Hybrid Filter) ─── -->
+  <rect x="280" y="225" width="310" height="110" rx="8" fill="#e6f2ff" stroke="#0078d4" stroke-width="1.5" filter="url(#shadowSmall)"/>
+  <text x="435" y="243" text-anchor="middle" font-size="11" font-weight="700" fill="#0078d4">Activity: ListAndFilterFiles</text>
+
+  <!-- Server-side zone (Graph API) -->
+  <rect x="288" y="250" width="294" height="42" rx="4" fill="#dbeafe" stroke="#0078d4" stroke-width="0.8" stroke-dasharray="2,1"/>
+  <text x="298" y="263" font-size="7.5" font-weight="700" fill="#0078d4">① SERVER-SIDE (Graph API):</text>
+  <text x="298" y="276" font-size="8.5" fill="#333">GET /sites/{id}/lists/{id}/items</text>
+  <text x="298" y="288" font-size="8.5" fill="#333">  $filter=fields/LifecycleStatus eq 'Approved'  &amp;  $expand=fields</text>
+
+  <!-- Divider arrow: data flows from server to client -->
+  <line x1="435" y1="293" x2="435" y2="300" stroke="#666" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+  <!-- Client-side zone (Python in Activity) -->
+  <rect x="288" y="301" width="294" height="28" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="0.8" stroke-dasharray="2,1"/>
+  <text x="298" y="314" font-size="7.5" font-weight="700" fill="#2e7d32">② CLIENT-SIDE (Python — in this Activity):</text>
+  <text x="298" y="326" font-size="8.5" fill="#333">if item['NextECM_Mig_File_Ext'] == 'pdf':  → keep</text>
+
+  <!-- Arrow: Orchestrator → Activity 1 -->
+  <line x1="560" y1="200" x2="560" y2="215" stroke="#555" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="560" y1="215" x2="435" y2="215" stroke="#555" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="435" y1="215" x2="435" y2="223" stroke="#555" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Arrow: SharePoint → Activity 1 (server-side zone) -->
+  <line x1="210" y1="340" x2="245" y2="340" stroke="#0078d4" stroke-width="1.5"/>
+  <line x1="245" y1="340" x2="245" y2="270" stroke="#0078d4" stroke-width="1.5"/>
+  <line x1="245" y1="270" x2="286" y2="270" stroke="#0078d4" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <text x="247" y="260" font-size="7" fill="#0078d4" font-weight="600">paginated</text>
+
+  <!-- ─── Fan-out Zone ─── -->
+  <rect x="280" y="330" width="640" height="160" rx="8" fill="#fff8e1" stroke="#f5a623" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="600" y="350" text-anchor="middle" font-size="11" font-weight="700" fill="#f5a623">Fan-Out: Max 5 Concurrent Activities · Batches of 200 files</text>
+
+  <!-- Activity boxes inside fan-out -->
+  <rect x="295" y="365" width="140" height="110" rx="6" fill="#fff" stroke="#0078d4" stroke-width="1" filter="url(#shadowSmall)"/>
+  <text x="365" y="385" text-anchor="middle" font-size="10" font-weight="600" fill="#0078d4">DownloadBatch 1</text>
+  <text x="365" y="400" text-anchor="middle" font-size="8" fill="#555">Files 1–200</text>
+  <text x="365" y="418" text-anchor="middle" font-size="8" fill="#333">Graph $batch API</text>
+  <text x="365" y="432" text-anchor="middle" font-size="8" fill="#333">20 downloads/call</text>
+  <text x="365" y="448" text-anchor="middle" font-size="8" fill="#2e7d32">↓ PDF to Blob</text>
+  <text x="365" y="462" text-anchor="middle" font-size="8" fill="#2e7d32">↓ .metadata.json</text>
+
+  <rect x="450" y="365" width="140" height="110" rx="6" fill="#fff" stroke="#0078d4" stroke-width="1" filter="url(#shadowSmall)"/>
+  <text x="520" y="385" text-anchor="middle" font-size="10" font-weight="600" fill="#0078d4">DownloadBatch 2</text>
+  <text x="520" y="400" text-anchor="middle" font-size="8" fill="#555">Files 201–400</text>
+  <text x="520" y="418" text-anchor="middle" font-size="8" fill="#333">Graph $batch API</text>
+  <text x="520" y="432" text-anchor="middle" font-size="8" fill="#333">20 downloads/call</text>
+  <text x="520" y="448" text-anchor="middle" font-size="8" fill="#2e7d32">↓ PDF to Blob</text>
+  <text x="520" y="462" text-anchor="middle" font-size="8" fill="#2e7d32">↓ .metadata.json</text>
+
+  <rect x="605" y="365" width="140" height="110" rx="6" fill="#fff" stroke="#0078d4" stroke-width="1" filter="url(#shadowSmall)"/>
+  <text x="675" y="385" text-anchor="middle" font-size="10" font-weight="600" fill="#0078d4">DownloadBatch 3</text>
+  <text x="675" y="400" text-anchor="middle" font-size="8" fill="#555">Files 401–600</text>
+  <text x="675" y="418" text-anchor="middle" font-size="8" fill="#333">Graph $batch API</text>
+  <text x="675" y="432" text-anchor="middle" font-size="8" fill="#333">20 downloads/call</text>
+  <text x="675" y="448" text-anchor="middle" font-size="8" fill="#2e7d32">↓ PDF to Blob</text>
+  <text x="675" y="462" text-anchor="middle" font-size="8" fill="#2e7d32">↓ .metadata.json</text>
+
+  <!-- Ellipsis batch -->
+  <text x="790" y="425" text-anchor="middle" font-size="20" fill="#999">···</text>
+
+  <!-- Batch N -->
+  <rect x="830" y="365" width="75" height="110" rx="6" fill="#fff" stroke="#0078d4" stroke-width="1" filter="url(#shadowSmall)"/>
+  <text x="867" y="385" text-anchor="middle" font-size="9" font-weight="600" fill="#0078d4">Batch 500</text>
+  <text x="867" y="400" text-anchor="middle" font-size="7" fill="#555">99801–100K</text>
+  <text x="867" y="425" text-anchor="middle" font-size="8" fill="#333">$batch</text>
+  <text x="867" y="440" text-anchor="middle" font-size="8" fill="#2e7d32">↓ PDF</text>
+  <text x="867" y="455" text-anchor="middle" font-size="8" fill="#2e7d32">↓ JSON</text>
+
+  <!-- Arrow: Orchestrator → Fan-out -->
+  <path d="M 560 200 L 560 215 L 600 215 L 600 328" stroke="#f5a623" stroke-width="1.5" fill="none" marker-end="url(#arrowOrange)"/>
+
+  <!-- Arrow: SharePoint → Fan-out -->
+  <line x1="210" y1="400" x2="245" y2="400" stroke="#0078d4" stroke-width="1.5"/>
+  <line x1="245" y1="400" x2="245" y2="420" stroke="#0078d4" stroke-width="1.5"/>
+  <line x1="245" y1="420" x2="293" y2="420" stroke="#0078d4" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <text x="252" y="438" font-size="8" fill="#0078d4">$batch download</text>
+
+  <!-- ─── Activity: Upload to Blob (with sidecar) ─── -->
+  <rect x="340" y="510" width="320" height="65" rx="8" fill="#e6f2ff" stroke="#0078d4" stroke-width="1.5" filter="url(#shadowSmall)"/>
+  <text x="500" y="530" text-anchor="middle" font-size="11" font-weight="600" fill="#0078d4">Upload to Blob Storage</text>
+  <text x="500" y="546" text-anchor="middle" font-size="9" fill="#333">source-pdfs/{path}/doc.pdf</text>
+  <text x="500" y="562" text-anchor="middle" font-size="9" fill="#2e7d32" font-weight="600">source-pdfs/{path}/doc.pdf.metadata.json</text>
+
+  <!-- Arrow: Fan-out → Blob upload -->
+  <line x1="500" y1="490" x2="500" y2="508" stroke="#555" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- ─── Activity: Doc Intelligence ─── -->
+  <rect x="380" y="595" width="240" height="55" rx="8" fill="#f3eaff" stroke="#5c2d91" stroke-width="1.5" filter="url(#shadowSmall)"/>
+  <text x="500" y="617" text-anchor="middle" font-size="11" font-weight="600" fill="#5c2d91">Trigger Doc Intelligence</text>
+  <text x="500" y="633" text-anchor="middle" font-size="9" fill="#333">Batch API · 10 batches × 10K docs</text>
+
+  <!-- Arrow: Blob → Doc Intel -->
+  <line x1="500" y1="575" x2="500" y2="593" stroke="#555" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- ═══════════════ BLOB STORAGE (RIGHT) ═══════════════ -->
+  <rect x="1010" y="260" width="180" height="180" rx="10" fill="url(#blobGrad)" filter="url(#shadow)"/>
+  <text x="1100" y="288" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Azure Blob Storage</text>
+  <line x1="1025" y1="298" x2="1175" y2="298" stroke="#fff" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="1100" y="316" text-anchor="middle" font-size="9" fill="#e0f0ff">stdocintellpoc</text>
+  <text x="1100" y="336" text-anchor="middle" font-size="9" fill="#e0f0ff">source-pdfs/</text>
+  <text x="1100" y="352" text-anchor="middle" font-size="8" fill="#b3e5fc">├─ {path}/doc.pdf</text>
+  <text x="1100" y="368" text-anchor="middle" font-size="8" fill="#c8e6c9" font-weight="600">├─ {path}/doc.pdf.metadata.json</text>
+  <text x="1100" y="386" text-anchor="middle" font-size="9" fill="#e0f0ff">doc-intel-output/</text>
+  <text x="1100" y="402" text-anchor="middle" font-size="9" fill="#e0f0ff">llm-output/</text>
+  <text x="1100" y="420" text-anchor="middle" font-size="8" fill="#c8e6c9" font-weight="600">  (SP metadata + LLM merged)</text>
+
+  <!-- Arrow: Function → Blob -->
+  <line x1="660" y1="537" x2="1008" y2="350" stroke="#0078d4" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+
+  <!-- ═══════════════ DOC INTELLIGENCE ═══════════════ -->
+  <rect x="1010" y="470" width="180" height="100" rx="10" fill="url(#docGrad)" filter="url(#shadow)"/>
+  <text x="1100" y="498" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Doc Intelligence</text>
+  <line x1="1025" y1="508" x2="1175" y2="508" stroke="#fff" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="1100" y="528" text-anchor="middle" font-size="9" fill="#e8d4ff">Batch API (2024-11-30 GA)</text>
+  <text x="1100" y="544" text-anchor="middle" font-size="9" fill="#e8d4ff">Managed Identity auth</text>
+  <text x="1100" y="560" text-anchor="middle" font-size="9" fill="#e8d4ff">10K docs/batch max</text>
+
+  <!-- Arrow: Function → Doc Intel -->
+  <line x1="620" y1="622" x2="1008" y2="520" stroke="#5c2d91" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+
+  <!-- ═══════════════ LLM INFERENCE ═══════════════ -->
+  <rect x="1010" y="600" width="180" height="100" rx="10" fill="url(#llmGrad)" filter="url(#shadow)"/>
+  <text x="1100" y="625" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Azure OpenAI</text>
+  <line x1="1025" y1="635" x2="1175" y2="635" stroke="#fff" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="1100" y="653" text-anchor="middle" font-size="9" fill="#c8ffe8">Batch API (GPT-4o)</text>
+  <text x="1100" y="669" text-anchor="middle" font-size="9" fill="#c8ffe8">OCR text + .metadata.json</text>
+  <text x="1100" y="685" text-anchor="middle" font-size="9" fill="#c8ffe8">→ merged JSON output</text>
+
+  <!-- Arrow: Doc Intel → LLM -->
+  <line x1="1100" y1="570" x2="1100" y2="598" stroke="#555" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Sidecar metadata arrow into LLM -->
+  <path d="M 1100 440 L 1100 455 L 1200 455 L 1200 640 L 1192 640" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="4,2" fill="none" marker-end="url(#arrowGreen)"/>
+  <text x="1210" y="550" font-size="8" fill="#2e7d32" transform="rotate(90,1210,550)">.metadata.json passthrough</text>
+
+  <!-- ═══════════════ SNOWFLAKE ═══════════════ -->
+  <rect x="1210" y="740" width="170" height="110" rx="10" fill="url(#snowGrad)" filter="url(#shadow)"/>
+  <text x="1295" y="766" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Snowflake</text>
+  <line x1="1225" y1="776" x2="1365" y2="776" stroke="#fff" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="1295" y="796" text-anchor="middle" font-size="9" fill="#e0f7ff">Snowpipe (auto-ingest)</text>
+  <text x="1295" y="814" text-anchor="middle" font-size="9" fill="#e0f7ff">Event Grid → BlobCreated</text>
+  <text x="1295" y="832" text-anchor="middle" font-size="9" fill="#e0f7ff">COPY INTO target_table</text>
+  <text x="1295" y="848" text-anchor="middle" font-size="9" fill="#e0f7ff">(SP metadata + LLM fields)</text>
+
+  <!-- Arrow: LLM → Blob → Snowflake -->
+  <path d="M 1100 700 L 1100 720 L 1180 720 L 1180 400 L 1192 400" stroke="#555" stroke-width="1" stroke-dasharray="3,2" fill="none"/>
+  <text x="1135" y="715" font-size="8" fill="#555">output → blob</text>
+  <path d="M 1192 420 L 1230 420 L 1230 738" stroke="#29b5e8" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="1242" y="580" font-size="8" fill="#29b5e8" transform="rotate(90,1242,580)">Event Grid</text>
+
+  <!-- ═══════════════ MANAGED IDENTITY (replaces Key Vault) ═══════════════ -->
+  <rect x="690" y="140" width="150" height="55" rx="8" fill="#fff" stroke="#0078d4" stroke-width="1.5" filter="url(#shadowSmall)"/>
+  <text x="765" y="160" text-anchor="middle" font-size="10" font-weight="600" fill="#0078d4">🔑 Managed Identity</text>
+  <text x="765" y="175" text-anchor="middle" font-size="8" fill="#555">DefaultAzureCredential</text>
+  <text x="765" y="187" text-anchor="middle" font-size="8" fill="#555">Graph + Blob (no certs/KV)</text>
+
+  <!-- ═══════════════ SIDECAR METADATA DETAIL ═══════════════ -->
+  <rect x="30" y="520" width="200" height="150" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5" filter="url(#shadowSmall)"/>
+  <text x="130" y="542" text-anchor="middle" font-size="10" font-weight="700" fill="#2e7d32">Sidecar Metadata</text>
+  <line x1="45" y1="550" x2="215" y2="550" stroke="#2e7d32" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="45" y="567" font-size="8" fill="#333">doc.pdf.metadata.json:</text>
+  <text x="45" y="582" font-size="7.5" fill="#555">  ABB_Coll_DocumentId</text>
+  <text x="45" y="595" font-size="7.5" fill="#555">  ABB_Coll_LifecycleStatus</text>
+  <text x="45" y="608" font-size="7.5" fill="#555">  ABB_Coll_DocumentKind</text>
+  <text x="45" y="621" font-size="7.5" fill="#555">  ABB_Coll_ApprovalDate</text>
+  <text x="45" y="634" font-size="7.5" fill="#555">  ABB_Coll_OwningOrganization</text>
+  <text x="45" y="647" font-size="7.5" fill="#555">  ... (20 fields total)</text>
+  <text x="130" y="665" text-anchor="middle" font-size="7.5" fill="#2e7d32" font-weight="600">Passed to LLM + Snowflake</text>
+
+  <!-- ═══════════════ THROTTLE CONTROL PANEL ═══════════════ -->
+  <rect x="30" y="700" width="380" height="280" rx="10" fill="#fff" stroke="#d32f2f" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="30" y="700" width="380" height="30" rx="10" fill="#d32f2f"/>
+  <rect x="30" y="720" width="380" height="10" fill="#d32f2f"/>
+  <text x="220" y="720" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Throttle Control Strategy</text>
+
+  <text x="50" y="752" font-size="10" font-weight="600" fill="#333">Concurrency Limits:</text>
+  <text x="55" y="769" font-size="9" fill="#555">• Max 5 concurrent download activities</text>
+  <text x="55" y="785" font-size="9" fill="#555">• Each activity: 200 files via $batch (10 calls)</text>
+  <text x="55" y="801" font-size="9" fill="#555">• Effective: 5 concurrent Graph HTTP requests</text>
+  <text x="55" y="817" font-size="9" fill="#555">• vs current: 10 threads × CSOM = higher cost</text>
+
+  <text x="50" y="840" font-size="10" font-weight="600" fill="#333">Graph API Advantages:</text>
+  <text x="55" y="857" font-size="9" fill="#555">• $batch: 20 file downloads per HTTP call</text>
+  <text x="55" y="873" font-size="9" fill="#555">• Lower resource units vs CSOM/REST</text>
+  <text x="55" y="889" font-size="9" fill="#555">• Retry-After header: auto backoff on 429</text>
+  <text x="55" y="905" font-size="9" fill="#555">• Delta query: incremental after first run</text>
+  <text x="55" y="921" font-size="9" fill="#555">• Proper User-Agent traffic decoration</text>
+
+  <text x="50" y="946" font-size="10" font-weight="600" fill="#333">Total API calls for 100K files:</text>
+  <text x="55" y="963" font-size="9" fill="#0078d4">• List: ~6-7 pages (5K/page) = 7 calls</text>
+  <text x="55" y="979" font-size="9" fill="#0078d4">• Download: 100K/20 = 5,000 HTTP calls</text>
+
+  <!-- ═══════════════ BENEFITS PANEL ═══════════════ -->
+  <rect x="440" y="700" width="380" height="300" rx="10" fill="#fff" stroke="#2e7d32" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="440" y="700" width="380" height="30" rx="10" fill="#2e7d32"/>
+  <rect x="440" y="720" width="380" height="10" fill="#2e7d32"/>
+  <text x="630" y="720" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Improvements vs Current Code</text>
+
+  <text x="460" y="752" font-size="10" font-weight="600" fill="#333">Performance:</text>
+  <text x="465" y="769" font-size="9" fill="#555">• 20x fewer HTTP calls ($batch grouping)</text>
+  <text x="465" y="785" font-size="9" fill="#555">• Lower resource units (Graph vs CSOM)</text>
+  <text x="465" y="801" font-size="9" fill="#555">• Hybrid $filter: Graph filters 1 col,</text>
+  <text x="472" y="815" font-size="9" fill="#555">  Python filters 2nd (in same Activity)</text>
+  <text x="465" y="831" font-size="9" fill="#555">• Delta query (only new/changed files)</text>
+
+  <text x="460" y="852" font-size="10" font-weight="600" fill="#333">Reliability:</text>
+  <text x="465" y="869" font-size="9" fill="#555">• Checkpointing (resume from failure point)</text>
+  <text x="465" y="885" font-size="9" fill="#555">• Idempotent: knows which files transferred</text>
+  <text x="465" y="901" font-size="9" fill="#555">• No timeout (Flex Consumption plan)</text>
+  <text x="465" y="917" font-size="9" fill="#555">• Scale to 1000 instances (vs 1 machine)</text>
+
+  <text x="460" y="940" font-size="10" font-weight="600" fill="#333">Security + Metadata:</text>
+  <text x="465" y="957" font-size="9" fill="#555">• Cert-free: Managed Identity → Graph + Blob</text>
+  <text x="465" y="973" font-size="9" fill="#555">• No Key Vault, no client secret, no PEM on disk</text>
+  <text x="465" y="989" font-size="9" fill="#2e7d32" font-weight="600">• Full SP metadata in sidecar JSON</text>
+
+  <!-- ═══════════════ TIMELINE PANEL ═══════════════ -->
+  <rect x="850" y="700" width="320" height="130" rx="10" fill="#fff" stroke="#555" stroke-width="1" filter="url(#shadow)"/>
+  <text x="1010" y="720" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Estimated Processing Time</text>
+  <line x1="865" y1="728" x2="1155" y2="728" stroke="#eee" stroke-width="1"/>
+  <text x="870" y="745" font-size="9" fill="#555">List + Hybrid Filter:</text>
+  <text x="1140" y="745" text-anchor="end" font-size="9" font-weight="600" fill="#0078d4">~1 min</text>
+  <text x="870" y="763" font-size="9" fill="#555">Download 100K ($batch):</text>
+  <text x="1140" y="763" text-anchor="end" font-size="9" font-weight="600" fill="#0078d4">~4-6 hrs</text>
+  <text x="870" y="781" font-size="9" fill="#555">Doc Intelligence (10 batches):</text>
+  <text x="1140" y="781" text-anchor="end" font-size="9" font-weight="600" fill="#5c2d91">~3-5 hrs</text>
+  <text x="870" y="799" font-size="9" fill="#555">LLM Batch (OpenAI):</text>
+  <text x="1140" y="799" text-anchor="end" font-size="9" font-weight="600" fill="#10a37f">~4-6 hrs</text>
+  <text x="1010" y="820" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Total: ~12-18 hrs (overnight)</text>
+
+  <!-- ═══════════════ LEGEND ═══════════════ -->
+  <rect x="850" y="850" width="320" height="130" rx="10" fill="#fff" stroke="#999" stroke-width="0.5" filter="url(#shadowSmall)"/>
+  <text x="1010" y="870" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Legend</text>
+  <line x1="865" y1="878" x2="1155" y2="878" stroke="#eee" stroke-width="1"/>
+  <circle cx="875" cy="893" r="5" fill="#f5a623"/>
+  <text x="890" y="897" font-size="9" fill="#555">Durable Functions orchestration</text>
+  <circle cx="875" cy="911" r="5" fill="#0078d4"/>
+  <text x="890" y="915" font-size="9" fill="#555">Graph API ($batch, delta, server-side $filter)</text>
+  <circle cx="875" cy="929" r="5" fill="#2e7d32"/>
+  <text x="890" y="933" font-size="9" fill="#555">Python client-side filter + sidecar metadata</text>
+  <circle cx="875" cy="947" r="5" fill="#5c2d91"/>
+  <text x="890" y="951" font-size="9" fill="#555">Doc Intelligence Batch API</text>
+  <circle cx="875" cy="965" r="5" fill="#29b5e8"/>
+  <text x="890" y="969" font-size="9" fill="#555">Snowpipe event-driven ingest</text>
+</svg>
