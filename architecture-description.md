@@ -1,23 +1,16 @@
 # Architecture Description: Durable Functions + Graph API Pipeline
 
-## AU-PCP Document Intelligence — 100K PDF Processing Pipeline
-
-**Date:** May 2026  
-**Customer:** ABB (OnePCP-DMS SharePoint Site — production target; PoC uses `QualityAlerts` site)  
-**Workload:** 100K+ approved PDFs → OCR → LLM extraction → Snowflake  
-**PoC Status:** ✅ SharePoint → Blob phase deployed and validated end-to-end (5/5 PDFs uploaded). OCR / LLM / Snowflake phases are next.
-
----
-
-## 1. Executive Summary
+## 1. Summary
 
 This document describes the chosen production architecture for migrating ~100,000 approved PDF documents from SharePoint Online through Azure Document Intelligence (OCR) and Azure OpenAI (structured extraction) into Snowflake. The architecture uses **Azure Durable Functions on the Flex Consumption plan** with **Microsoft Graph API** as the SharePoint interaction layer.
 
 Authentication uses the Function App's **system-assigned Managed Identity end-to-end** — to Microsoft Graph (for SharePoint), to Azure Blob Storage, and to the Durable Functions task hub. No certificates, no client secrets, no Key Vault required.
 
+> 💡 **Fallback for tenants that can't grant Graph permissions to a Managed Identity:** if consent app permissions on the MSI service principalcannot be granted - see [§9A — Fallback Auth: Certificate-Based App-Only via Key Vault](#9a-fallback-auth-certificate-based-app-only-via-key-vault). The change is isolated to `graph_client.py` and four app settings.
+
 ---
 
-## 1A. PoC Implementation Status (May 2026)
+## 1A. PoC Implementation
 
 The SharePoint-to-Blob phases (1–5) are deployed and verified in `westeurope`:
 
@@ -52,9 +45,9 @@ The SharePoint-to-Blob phases (1–5) are deployed and verified in `westeurope`:
 
 ## 2. Why This Architecture Was Selected
 
-### 2.1 Customer's Current Solution (Baseline)
+### 2.1 Initial Solution (Baseline)
 
-The customer operates a Python notebook (`sp-to-blob.ipynb`) using the `office365-rest-python-client` library with the following pattern:
+The initial solution operates a Python notebook (`sp-to-blob.ipynb`) using the `office365-rest-python-client` library with the following pattern:
 
 ```
 OnlineSharepointConnector (cert auth)
@@ -132,7 +125,7 @@ Orchestrator
         └── Optional: Use deltaLink for subsequent runs (only fetch changes)
 ```
 
-> ⚠️ **Implementation gotcha (verified during PoC):** the items endpoint returns a SharePoint **list-item id** by default, which is *not* accepted by `/drives/{driveId}/items/{itemId}/content`. You must `$expand=driveItem` and use `driveItem.id` for the subsequent download. The PoC activity emits this real drive-item id.
+> **Implementation gotcha (verified during PoC):** the items endpoint returns a SharePoint **list-item id** by default, which is *not* accepted by `/drives/{driveId}/items/{itemId}/content`. You must `$expand=driveItem` and use `driveItem.id` for the subsequent download. The PoC activity emits this real drive-item id.
 >
 > **PoC mode (`SP_USE_CUSTOM_FIELDS=false`)**: the server-side `$filter` on `ABB_Coll_LifecycleStatus` is omitted (the PoC site has no such column) and only the client-side extension filter applies.
 
@@ -200,7 +193,7 @@ Each download_batch Activity
 - `SP_SITE_PREFIX` (e.g. `/sites/QualityAlerts`) is stripped from `FileRef` to derive the relative path; PoC successfully produced `Shared Documents/<filename>.pdf` blobs.
 - Managed Identity authentication to Storage Account (`Storage Blob Data Contributor` on the data account).
 
-> ⚠️ **Implementation gotcha (verified during PoC):** `azure-storage-blob`'s `upload_blob(content_settings=…)` requires a typed `ContentSettings` object. Passing a `dict` raises `'dict' object has no attribute 'cache_control'` deep inside the SDK. Always import `from azure.storage.blob import ContentSettings`.
+> **Implementation gotcha (verified during PoC):** `azure-storage-blob`'s `upload_blob(content_settings=…)` requires a typed `ContentSettings` object. Passing a `dict` raises `'dict' object has no attribute 'cache_control'` deep inside the SDK. Always import `from azure.storage.blob import ContentSettings`.
 
 ### Phase 5: Fan-In & Status Report
 
@@ -270,9 +263,9 @@ Blob Storage (llm-output/)
 
 ---
 
-## 4. Architecture Comparison vs. Customer's Current Code
+## 4. Architecture Comparison vs. Initial solution
 
-| Aspect | Customer's Current (`sp-to-blob.ipynb`) | Proposed (Durable Functions + Graph) |
+| Aspect | Initial solution | Proposed (Durable Functions + Graph) |
 |--------|----------------------------------------|--------------------------------------|
 | **SP API** | `office365-rest-python-client` (CSOM/REST) | Microsoft Graph API v1.0 |
 | **Resource cost per call** | HIGH (legacy API) | LOW (Microsoft's recommended path) |
@@ -439,21 +432,64 @@ Blob Storage (llm-output/)
 
 ---
 
-## 10. What Transfers from Customer's Current Code
+## 10. Fallback Auth: Certificate-Based App-Only via Key Vault
 
-| Component from `sp-to-blob.ipynb` | Reuse in New Architecture |
-|-----------------------------------|--------------------------|
-| Filtering logic (`FileSystemObjectType==0`, `ext in {pdf}`, `status==Approved`) | `status==Approved` → Graph `$filter`; `ext==pdf` → client-side filter during pagination |
-| `select_fields` list (20 ABB_Coll_* columns) | Translates to `$expand=fields($select=...)` |
-| `_build_blob_name()` path logic | Reused as-is in download activity |
-| `upload_blob(name=blob_name, data=file_buffer, overwrite=True)` | Reused as-is (same Azure Storage SDK) |
-| `tenacity` retry decorator | Replaced by Durable Functions native retry policy |
-| `ThreadPoolExecutor(max_workers=10)` | Replaced by fan-out/fan-in (5 concurrent activities) |
-| `OnlineSharepointConnector` + `connect_via_cert()` | Replaced by Function App MSI + `DefaultAzureCredential` → raw Graph HTTP (`httpx`). No certificate, no Key Vault. |
-| `get_file_by_server_relative_url()` | Replaced by `GET /drives/{driveId}/items/{driveItemId}/content` (note: drive-item id, not list-item id — expand `driveItem` to obtain it) |
-| `get_all(5000, print_progress)` | Replaced by `$top=5000` + `@odata.nextLink` pagination |
+The default design uses the Function App's system-assigned **Managed Identity** to call Microsoft Graph. This requires a Microsoft Entra admin (Global Administrator, Privileged Role Administrator, or an admin holding `AppRoleAssignment.ReadWrite.All`) to consent the Graph application permission (`Sites.Selected` or `Sites.Read.All`) **for the MSI service principal**. If for various reasons the consent cannot be granted  — although it can still be issued an Entra **App Registration with a certificate** (which is the auth model the existing `sp-to-blob.ipynb` already uses) — the pipeline can swap to certificate-based app-only auth with minimal code change.
 
----
+### Required Azure resource additions
+
+| Resource | Purpose |
+|---|---|
+| **Azure Key Vault** (Standard SKU, RBAC mode) | Stores the PFX/PEM certificate as a Key Vault **certificate** object |
+| **Entra App Registration** | Holds the Graph application permission and the certificate's public key |
+
+### Required permissions
+
+- App Registration is granted Microsoft Graph application permission `Sites.Selected` (per-site grant, preferred) or `Sites.Read.All` — same as the MSI path, **but the admin consent is now bound to the App Registration**, which is typically easier for customer IT to issue than a runtime MSI consent.
+- Function App's system-assigned MSI is granted **`Key Vault Secrets User`** (and `Key Vault Certificates User` if pulling the full cert) on the Key Vault. This is a *data-plane* role on the customer's own Key Vault — no Graph admin involvement required.
+
+### Code & configuration changes
+
+The only module that changes is `function_app/shared/graph_client.py`. Swap `DefaultAzureCredential()` for a `CertificateCredential`:
+
+```python
+from azure.identity import CertificateCredential, DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+
+# MSI → Key Vault (data plane) to fetch the cert bytes
+kv = SecretClient(vault_url=os.environ["KEY_VAULT_URL"], credential=DefaultAzureCredential())
+pfx_bytes = base64.b64decode(kv.get_secret(os.environ["KV_CERT_SECRET_NAME"]).value)
+
+# Cert → Graph token
+credential = CertificateCredential(
+    tenant_id=os.environ["AAD_TENANT_ID"],
+    client_id=os.environ["AAD_CLIENT_ID"],
+    certificate_data=pfx_bytes,
+)
+```
+
+New app settings on the Function App:
+
+| Setting | Value |
+|---|---|
+| `KEY_VAULT_URL` | `https://<kv-name>.vault.azure.net/` |
+| `KV_CERT_SECRET_NAME` | Name of the Key Vault certificate (referenced as a secret) |
+| `AAD_TENANT_ID` | Customer's Entra tenant id |
+| `AAD_CLIENT_ID` | App Registration (client) id |
+
+Storage access (`stdocintellpoc`, `stdocintellfunc`) keeps using MSI — the certificate path is **only** for the Graph call. So the data-plane roles in §1A stay exactly the same.
+
+### Operational impact
+
+| Concern | Effect |
+|---|---|
+| Cert rotation | Use Key Vault auto-rotation (Entra-issued certs) or replace the KV certificate manually; the Function App picks up the new cert on next token request — no redeploy needed. |
+| Cert expiry monitoring | Add an Azure Monitor alert on the Key Vault certificate's `expiresOn` attribute. |
+| Cold-start latency | One extra Key Vault `getSecret` call per worker instance on first Graph call (~50–150 ms); negligible at this scale. |
+| Code on disk | The PFX bytes live only in memory inside the worker — they are **never** written to the filesystem (unlike the current notebook's `selfsigncert.pem`). |
+| Cost | Key Vault Standard ≈ $0.03 per 10K operations → < $0.01/month at this access pattern. |
+
+
 
 ## 11. Risks & Recommendations
 
